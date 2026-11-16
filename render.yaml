@@ -27,7 +27,7 @@ services:
       - key: LLM_TIMEOUT_SECONDS
         value: "120"
       - key: DATA_ENCRYPTION_KEY
-        generateValue: true
+        sync: false
       - key: LLM_API_KEY
         sync: false
       - key: FALLBACK_LLM_API_KEY
