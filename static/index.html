@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Centralizador de Soluções e Diagnósticos</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<section id="auth-screen" class="auth-screen" hidden>
+  <div class="auth-card">
+    <span class="eyebrow">SUPORTE TÉCNICO · ACESSO PRIVADO</span>
+    <h1>Centralizador de Soluções e Diagnósticos</h1>
+    <p id="auth-hint" class="muted"></p>
+    <form id="login-form" hidden>
+      <label>Usuário<input name="username" required autocomplete="username"></label>
+      <label>Senha<input name="password" type="password" required autocomplete="current-password"></label>
+      <button class="primary">Entrar</button>
+    </form>
+    <form id="setup-form" hidden>
+      <label>Seu usuário<input name="username" required minlength="3" maxlength="40" autocomplete="username" placeholder="Ex.: carol"></label>
+      <label>Crie uma senha forte<input name="password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></label>
+      <small>Use pelo menos 12 caracteres. Esta será a conta administradora e poderá criar outros acessos.</small>
+      <button class="primary">Criar conta administradora</button>
+    </form>
+    <div id="auth-error" class="error" hidden></div>
+  </div>
+</section>
+
+<div id="app-shell" hidden>
+  <header><div><span class="eyebrow">SUPORTE TÉCNICO</span><h1>Centralizador de Soluções e Diagnósticos</h1><p>Troubleshooting guiado de notebooks e computadores</p></div><div class="header-account"><details class="account-menu"><summary id="user-label" class="badge">Minha conta</summary><div class="account-menu-items"><button type="button" onclick="togglePassword(); this.closest('details').open=false">Alterar senha</button><button type="button" class="account-logout" onclick="logout()">Sair</button></div></details></div></header>
+  <dialog id="password-dialog" class="app-modal" aria-labelledby="password-title"><form id="password-form"><div class="modal-heading"><div><span class="eyebrow">SUA CONTA</span><h2 id="password-title">Alterar senha</h2></div><button class="modal-close" type="button" aria-label="Fechar" onclick="togglePassword(false)">×</button></div><label>Senha atual<input name="current_password" type="password" required autocomplete="current-password"></label><label>Nova senha (mínimo 12 caracteres)<input name="new_password" type="password" minlength="12" maxlength="128" required autocomplete="new-password"></label><div class="actions"><button class="primary">Salvar nova senha</button><button type="button" class="secondary" onclick="togglePassword(false)">Cancelar</button></div></form></dialog>
+  <nav>
+    <button class="tab active" data-tab="new">Novo chamado</button>
+    <button class="tab" data-tab="open">Chamados abertos</button>
+    <button class="tab" data-tab="knowledge">Base de conhecimento</button>
+    <button class="tab" data-tab="users" id="users-tab" hidden>Usuários</button>
+  </nav>
+  <main>
+    <section id="new" class="view active"><div class="card"><h2>Abrir chamado</h2><p class="muted">Os casos anteriores concluídos do mesmo tipo de equipamento serão consultados ao criar o chamado.</p><form id="new-form"><label>Tipo de equipamento *<select name="tipo_equipamento"><option value="notebook">Notebook</option><option value="desktop">Computador desktop</option></select></label><label>Marca e modelo *<input name="modelo_notebook" required placeholder="Ex.: Dell Latitude 5420 ou PC montado"></label><label>Sintoma principal *<textarea name="sintoma_principal" required placeholder="Descreva o problema observado"></textarea></label><label>Testes já feitos <textarea name="testes_ja_feitos" placeholder="Um por linha"></textarea></label><label>Observações iniciais <textarea name="observacoes_iniciais"></textarea></label><button class="primary">Criar chamado</button></form></div><div id="created"></div></section>
+    <section id="open" class="view"><div class="section-head"><div><h2>Chamados abertos</h2><p class="muted">Retome um diagnóstico em andamento.</p></div><button class="secondary" onclick="loadOpen()">Atualizar</button></div><div id="open-list"></div><div id="ticket-work"></div></section>
+    <section id="knowledge" class="view"><div class="section-head"><div><h2>Base de conhecimento</h2><p class="muted">Casos agrupados por chamado, com os testes recolhidos.</p></div><button class="secondary" onclick="loadKnowledge()">Atualizar</button></div><div class="knowledge-tools"><div class="scope-toggle" role="tablist" aria-label="Categoria da base"><button class="scope-tab active" role="tab" aria-selected="true" data-scope="private">Minha base</button><button class="scope-tab" role="tab" aria-selected="false" data-scope="general">Base geral</button></div><input id="knowledge-search" type="search" placeholder="Buscar modelo, sintoma ou solução" aria-label="Buscar na base de conhecimento"></div><p id="knowledge-count" class="muted knowledge-count"></p><div id="knowledge-list"></div></section>
+    <section id="users" class="view"><div class="section-head"><div><h2>Central de usuários</h2><p class="muted">Visualize os acessos criados, o uso de cada conta e gerencie sua disponibilidade.</p></div></div><div class="card"><form id="user-form"><label>Nome de usuário<input name="username" required minlength="3" maxlength="40" placeholder="Letras, números, ponto, hífen ou sublinhado"></label><label>Senha inicial (mínimo 12 caracteres)<input name="password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></label><button class="primary">Criar acesso</button></form></div><div id="users-list"></div></section>
+  </main>
+</div>
+<div id="toast" role="status"></div>
+<script src="/static/app.js"></script>
+</body></html>
