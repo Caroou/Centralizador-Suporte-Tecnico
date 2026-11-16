@@ -131,7 +131,7 @@ def db():
     if DATABASE_URL:
         import psycopg
 
-        conn = psycopg.connect(DATABASE_URL, row_factory=pg_row, prepare_threshold=None)
+        conn = psycopg.connect(DATABASE_URL, row_factory=pg_row, prepare_threshold=None, sslmode="require")
         connection = PostgresConnection(conn)
     else:
         if os.getenv("RENDER"):

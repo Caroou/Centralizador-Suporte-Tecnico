@@ -44,7 +44,7 @@ Localmente, os dados ficam no arquivo `centralizador.db` dentro da pasta do app 
 Em produção, `DATABASE_URL` seleciona PostgreSQL; sem essa variável, o app continua usando SQLite local. No Render, o app exige `DATABASE_URL` para não gravar por engano no sistema de arquivos temporário. O `render.yaml` configura o serviço Web gratuito, região Virginia, Python 3.14.10 e health check em `/healthz`; os dados persistem no PostgreSQL do Supabase, sem disco Render.
 
 1. Crie um projeto Supabase e escolha uma região próxima da região Virginia do Render, se disponível.
-2. No Supabase, abra **Connect** e copie a URI do **Transaction pooler**. Não use a chave `anon`/publishable: `DATABASE_URL` é a conexão PostgreSQL privada. Guarde-a como segredo.
+2. No Supabase, abra **Connect** e copie a URI do **Session pooler** (porta 5432), adequada a um backend persistente do Render em rede IPv4. Não use a chave `anon`/publishable: `DATABASE_URL` é a conexão PostgreSQL privada. Guarde-a como segredo.
 3. No Render, acesse **New > Blueprint**, conecte este repositório e escolha `main`. O Render lerá o `render.yaml` na raiz. Informe `DATABASE_URL` e os segredos pedidos (`LLM_API_KEY`, `FALLBACK_LLM_API_KEY`, `BOOTSTRAP_ADMIN_USERNAME` e `BOOTSTRAP_ADMIN_PASSWORD`, com pelo menos 12 caracteres).
 4. Deixe o Render gerar `DATA_ENCRYPTION_KEY`; guarde uma cópia segura. Ela precisa permanecer igual entre deploys e backups para que os dados criptografados continuem legíveis.
 5. Confirme o deploy. A primeira execução cria as tabelas e carrega as referências gerais no Supabase. O primeiro usuário administrador é criado a partir das variáveis `BOOTSTRAP_ADMIN_*`.
