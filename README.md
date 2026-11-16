@@ -39,22 +39,23 @@ O arquivo SQLite usa tabelas `tickets`, `ticket_steps` e `knowledge`. Na primeir
 
 Localmente, os dados ficam no arquivo `centralizador.db` dentro da pasta do app e sobrevivem a fechar/reiniciar o servidor. `DATABASE_PATH` permite escolher outro local. Faça cópias de segurança periódicas desse arquivo; ele está ignorado pelo Git e não deve ser enviado junto com o código.
 
-### Render
+### Render + Supabase
 
-O arquivo `render.yaml` prepara um Blueprint com Python 3.14.10, health check e SQLite em disco persistente montado em `/var/data`. Ele seleciona o plano Starter porque discos persistentes não estão disponíveis em serviços Web gratuitos; o plano pago e o disco têm cobrança. Consulte os preços atuais antes de criar o serviço. O disco é de instância única e não permite escalar horizontalmente; para múltiplas instâncias, migre o armazenamento para PostgreSQL.
+Em produção, `DATABASE_URL` seleciona PostgreSQL; sem essa variável, o app continua usando SQLite local. No Render, o app exige `DATABASE_URL` para não gravar por engano no sistema de arquivos temporário. O `render.yaml` configura o serviço Web gratuito, região Virginia, Python 3.14.10 e health check em `/healthz`; os dados persistem no PostgreSQL do Supabase, sem disco Render.
 
-1. Crie um repositório vazio no GitHub e envie o código sem `.env`, arquivos `.db` ou cópias de segurança. O `.gitignore` já exclui esses arquivos.
-2. No Render, escolha criar um **Blueprint** e conecte o repositório. O Render lê `render.yaml` e solicitará os segredos marcados `sync: false`.
-3. Informe as chaves do Gemini principal e reserva, além de `BOOTSTRAP_ADMIN_USERNAME` e `BOOTSTRAP_ADMIN_PASSWORD` (mínimo de 12 caracteres). O Render gera `DATA_ENCRYPTION_KEY` automaticamente.
-4. Após o primeiro deploy, entre na URL do serviço e use a conta inicial configurada. Faça cópias seguras do banco e da chave de criptografia; mantenha a chave estável entre deploys e backups.
+1. Crie um projeto Supabase e escolha uma região próxima da região Virginia do Render, se disponível.
+2. No Supabase, abra **Connect** e copie a URI do **Transaction pooler**. Não use a chave `anon`/publishable: `DATABASE_URL` é a conexão PostgreSQL privada. Guarde-a como segredo.
+3. No Render, acesse **New > Blueprint**, conecte este repositório e escolha `main`. O Render lerá o `render.yaml` na raiz. Informe `DATABASE_URL` e os segredos pedidos (`LLM_API_KEY`, `FALLBACK_LLM_API_KEY`, `BOOTSTRAP_ADMIN_USERNAME` e `BOOTSTRAP_ADMIN_PASSWORD`, com pelo menos 12 caracteres).
+4. Deixe o Render gerar `DATA_ENCRYPTION_KEY`; guarde uma cópia segura. Ela precisa permanecer igual entre deploys e backups para que os dados criptografados continuem legíveis.
+5. Confirme o deploy. A primeira execução cria as tabelas e carrega as referências gerais no Supabase. O primeiro usuário administrador é criado a partir das variáveis `BOOTSTRAP_ADMIN_*`.
 
-O banco local não é enviado ao Git e o serviço começa com um SQLite vazio, preenchido pelas orientações gerais iniciais na primeira execução. Para migrar os chamados locais mais tarde, transfira o banco por um canal seguro para `/var/data` e configure no Render a mesma `DATA_ENCRYPTION_KEY` usada para criptografá-lo. Nunca coloque chaves no GitHub.
+O banco SQLite local não é enviado ao Git e não é copiado automaticamente para o Supabase. A primeira execução no Supabase começa com uma conta administradora nova e a base de referências gerais; chamados e contas locais precisam de migração separada caso devam ser preservados. Nunca coloque a URI, chaves de IA, senha ou chave de criptografia no GitHub.
 
 ## Login, isolamento e criptografia
 
 Na primeira abertura local, crie a conta administradora. Ela pode criar, desativar e excluir contas de técnicos. Ao excluir uma conta, seus chamados e registros privados são removidos; suas contribuições gerais permanecem e passam para a administração. Cada usuário pode editar apenas os próprios registros, privados ou gerais; as orientações padrão ficam sob edição exclusiva da administração. A base geral é visível a todos e qualquer usuário pode publicar nela ao encerrar um chamado. A base privada é a opção padrão.
 
-Os campos de texto de chamados, testes, observações, causas e part numbers são criptografados com AES-GCM antes de serem gravados no SQLite. Senhas são armazenadas como hashes scrypt, e as sessões usam cookies `HttpOnly` e `SameSite=Strict`. A chave `DATA_ENCRYPTION_KEY` fica fora do banco no `.env` local ou no cofre de variáveis secretas do host. **Faça uma cópia segura da chave separada do banco**: sem ela, os dados criptografados não podem ser recuperados. A criptografia protege o arquivo do banco isolado; um invasor com acesso ao servidor e à chave ainda poderia descriptografar os dados.
+Os campos de texto de chamados, testes, observações, causas e part numbers são criptografados com AES-GCM antes de serem gravados no SQLite local ou no PostgreSQL de produção. Senhas são armazenadas como hashes scrypt, e as sessões usam cookies `HttpOnly` e `SameSite=Strict`. A chave `DATA_ENCRYPTION_KEY` fica fora do banco no `.env` local ou no cofre de variáveis secretas do host. **Faça uma cópia segura da chave separada do banco**: sem ela, os dados criptografados não podem ser recuperados. A criptografia protege os campos armazenados; um invasor com acesso ao servidor e à chave ainda poderia descriptografar esses dados.
 
 Ao iniciar com a nova versão, o app migra os campos antigos em texto claro para criptografia e atribui os dados existentes à primeira conta administradora criada. Faça uma cópia de segurança do banco e do `.env` antes de mover a instalação para outro computador.
 
