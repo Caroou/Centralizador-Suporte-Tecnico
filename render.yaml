@@ -20,7 +20,7 @@ services:
       - key: LLM_PROVIDER
         value: gemini
       - key: GEMINI_MODEL
-        value: gemini-3.5-flash-lite
+        value: gemini-3.8-flash
       - key: FALLBACK_LLM_PROVIDER
         value: gemini
       - key: FALLBACK_GEMINI_MODEL
