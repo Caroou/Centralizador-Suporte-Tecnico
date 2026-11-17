@@ -6,7 +6,8 @@ header{position:relative;z-index:20;isolation:isolate;overflow:visible;backgroun
 header:after{content:"";position:absolute;z-index:-1;width:290px;height:290px;right:max(20px,calc((100% - 1140px)/2));top:-180px;border:1px solid #ffffff20;border-radius:50%;box-shadow:0 0 0 34px #ffffff09,0 0 0 72px #ffffff08}
 header h1{font-size:clamp(21px,3vw,29px);letter-spacing:-.6px;line-height:1.18;margin:7px 0 6px;font-weight:750}
 header p{margin:0;color:#d1def0;font-size:14px}
-.eyebrow{font-size:10px;letter-spacing:1.8px;color:#9bc2ff;font-weight:750}
+.eyebrow{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid #ffffff30;border-left:3px solid #76a9f2;border-radius:5px;background:#ffffff12;color:#e5efff;font-size:11px;letter-spacing:1.45px;font-weight:850;line-height:1.25}
+.auth-card .eyebrow,.app-modal .eyebrow{color:#1b477f;border-color:#d2dff0;border-left-color:#3e71b6;background:#edf3fc}
 .badge{border:1px solid #ffffff3d;background:#ffffff0c;color:#e5edfa;padding:7px 11px;border-radius:30px;font-size:12px;white-space:nowrap}
 .header-account{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .header-button{color:#fff;background:#ffffff15;border-color:#ffffff35}
