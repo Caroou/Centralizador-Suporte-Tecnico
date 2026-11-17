@@ -15,7 +15,8 @@ Centralizador/
 └── static/
     ├── index.html
     ├── app.js
-    └── style.css
+    ├── style.css
+    └── favicon.svg          # ícone azul do app
 ```
 
 ## Como executar
@@ -33,7 +34,7 @@ Centralizador/
 5. Inicie: `python -m uvicorn app:app --reload`.
 6. Acesse [http://127.0.0.1:8000](http://127.0.0.1:8000) e crie sua conta administradora. A configuração inicial só é aceita pela máquina local.
 
-O arquivo SQLite usa tabelas `tickets`, `ticket_steps` e `knowledge`. Na primeira inicialização desta versão, o app inclui uma coleção inicial de orientações gerais de hardware e Windows para notebooks e desktops na base geral; o marcador de versão evita duplicá-la em reinicializações. Essas referências não são contabilizadas como chamados resolvidos, e entram no contexto da IA apenas quando combinam com o sintoma. Chamados e conhecimento guardam o tipo de equipamento; bancos existentes recebem as novas colunas automaticamente e registros antigos permanecem classificados como notebook. A orientação mais recente gerada pela IA fica salva e criptografada no próprio chamado: reabri-lo mostra a mesma orientação, sem gerar a primeira resposta outra vez. Ao registrar o resultado de um teste, o app pede o próximo passo e substitui a orientação salva. Casos anteriores são limitados ao mesmo tipo de equipamento. O histórico enviado à IA contém apenas o estado do chamado ativo, até 12 etapas recentes, no máximo cinco casos encerrados semelhantes e até quatro referências gerais relevantes. A busca de peça só ocorre ao clicar no botão; esta versão abre pesquisas em lojas/buscador e não coleta preço ou disponibilidade automaticamente.
+O arquivo SQLite usa tabelas `tickets`, `ticket_steps` e `knowledge`. Na primeira inicialização desta versão, o app inclui uma coleção inicial de orientações gerais de hardware e Windows para notebooks e desktops na base geral; o marcador de versão evita duplicá-la em reinicializações. Essas referências não são contabilizadas como chamados resolvidos, e entram no contexto da IA apenas quando combinam com o sintoma. Chamados e conhecimento guardam o tipo de equipamento; bancos existentes recebem as novas colunas automaticamente e registros antigos permanecem classificados como notebook. A orientação mais recente gerada pela IA fica salva e criptografada no próprio chamado: reabri-lo mostra a mesma orientação, sem gerar a primeira resposta outra vez. Ao registrar o resultado de um teste, o app pergunta se o sintoma continua. Só gera um novo passo quando o técnico escolhe continuar; “passou” significa que o teste não detectou falha, e não que o chamado foi resolvido. Casos anteriores são limitados ao mesmo tipo de equipamento. O histórico enviado à IA contém apenas o estado do chamado ativo, até 12 etapas recentes, no máximo cinco casos encerrados semelhantes e até quatro referências gerais relevantes. A busca de peça só ocorre ao clicar no botão; esta versão abre pesquisas em lojas/buscador e não coleta preço ou disponibilidade automaticamente.
 
 ## Deploy e persistência
 
