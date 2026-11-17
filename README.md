@@ -16,7 +16,11 @@ Centralizador/
     ├── index.html
     ├── app.js
     ├── style.css
-    └── favicon.svg          # ícone azul do app
+    ├── favicon.svg          # ícone azul do app
+    ├── manifest.webmanifest # nome, cores e ícones da instalação PWA
+    ├── icon-192.png
+    ├── icon-512.png
+    └── service-worker.js    # cache dos arquivos estáticos
 ```
 
 ## Como executar
@@ -51,6 +55,12 @@ Em produção, `DATABASE_URL` seleciona PostgreSQL; sem essa variável, o app co
 5. Confirme o deploy. A primeira execução cria as tabelas e carrega as referências gerais no Supabase. O primeiro usuário administrador é criado a partir das variáveis `BOOTSTRAP_ADMIN_*`.
 
 O banco SQLite local não é enviado ao Git e não é copiado automaticamente para o Supabase. A primeira execução no Supabase começa com uma conta administradora nova e a base de referências gerais; chamados e contas locais precisam de migração separada caso devam ser preservados. Nunca coloque a URI, chaves de IA, senha ou chave de criptografia no GitHub.
+
+## Instalar como aplicativo (PWA)
+
+O app inclui manifesto, ícones PNG nos tamanhos 192×192 e 512×512 e service worker. No Render, abra o endereço HTTPS em Chrome ou Edge e escolha **Instalar aplicativo** pelo ícone de instalação da barra de endereço ou pelo menu do navegador. Em celulares compatíveis, use o menu do navegador e escolha **Instalar app** ou **Adicionar à tela inicial**. Localmente, o PWA também pode ser testado em `http://localhost:8000` ou `http://127.0.0.1:8000`; outros endereços precisam usar HTTPS para habilitar a instalação.
+
+O service worker mantém em cache apenas a tela e os arquivos estáticos para abrir a interface sem conexão. Chamados, base de conhecimento, login e diagnóstico por IA continuam dependendo de conexão com o servidor; respostas da API e dados privados não são armazenados offline.
 
 ## Login, isolamento e criptografia
 

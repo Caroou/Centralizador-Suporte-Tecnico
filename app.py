@@ -572,6 +572,11 @@ def index():
     return FileResponse(ROOT / "static" / "index.html")
 
 
+@app.get("/service-worker.js")
+def service_worker():
+    return FileResponse(ROOT / "static" / "service-worker.js", media_type="application/javascript", headers={"Service-Worker-Allowed": "/", "Cache-Control": "no-cache"})
+
+
 @app.get("/healthz")
 def health_check():
     with db() as c:
