@@ -156,8 +156,13 @@ class DBRow(dict):
         return super().__getitem__(key)
 
 
-def pg_row(cursor, values):
-    return DBRow((column.name, value) for column, value in zip(cursor.description, values))
+def pg_row(cursor):
+    columns = tuple(column.name for column in cursor.description or ())
+
+    def make_row(values):
+        return DBRow(zip(columns, values)) if columns else tuple(values)
+
+    return make_row
 
 
 class PostgresConnection:
