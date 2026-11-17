@@ -787,11 +787,11 @@ def _llm_call(prompt: dict[str, Any], provider: str, prefix: str, max_tokens: in
         model = os.getenv(f"{prefix}GEMINI_MODEL", "gemini-3.8-flash")
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{urllib.parse.quote(model)}:generateContent?key={urllib.parse.quote(key)}"
         body = {"systemInstruction":{"parts":[{"text":SYSTEM_PROMPT}]},"contents":[{"role":"user","parts":[{"text":json.dumps(prompt, ensure_ascii=False)}]}],"generationConfig":{"temperature":0.2,"maxOutputTokens":max_tokens,"responseMimeType":"application/json"}}
-        headers = {"Content-Type": "application/json"}
+        headers = {"Content-Type": "application/json", "User-Agent": "Centralizador-Suporte/1.0"}
     elif provider == "openai_compatible":
         url = os.getenv(f"{prefix}OPENAI_BASE_URL", "https://api.groq.com/openai/v1").rstrip("/") + "/chat/completions"
         body = {"model":os.getenv(f"{prefix}OPENAI_MODEL", "llama-3.3-70b-versatile"),"messages":[{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":json.dumps(prompt, ensure_ascii=False)}],"temperature":0.2,"max_tokens":max_tokens,"response_format":{"type":"json_object"}}
-        headers = {"Content-Type": "application/json","Authorization":f"Bearer {key}"}
+        headers = {"Content-Type": "application/json","Authorization":f"Bearer {key}","User-Agent":"Centralizador-Suporte/1.0"}
     else: raise RuntimeError("provedor inválido")
     req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers, method="POST")
     try:
@@ -834,7 +834,11 @@ def llm_request(prompt: dict[str, Any]) -> dict[str, Any]:
             result = _llm_call(prompt, provider, prefix, max_tokens, timeout_seconds)
             if label == "reserva": result["_provedor_fallback"] = True
             return result
-        except HTTPException: raise
+        except HTTPException as e:
+            if label == "reserva":
+                errors.append(f"{label}: {e.detail}")
+                continue
+            raise
         except (TimeoutError, urllib.error.URLError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as e:
             errors.append(f"{label}: {str(e)[:180]}")
     if not any(os.getenv(f"{prefix}LLM_API_KEY", "").strip() for _, _, prefix in configs):
