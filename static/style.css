@@ -20,13 +20,14 @@ header p{margin:0;color:#d1def0;font-size:14px}
 .account-menu-items button{width:100%;text-align:left;background:#fff;color:var(--ink);border:1px solid transparent}
 .account-menu-items button:hover{background:var(--blue-pale);border-color:#d1def0}
 .account-menu-items .account-logout{color:var(--red)}
-.app-modal{width:min(100% - 28px,460px);max-height:min(90dvh,680px);padding:0;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--ink);box-shadow:0 24px 70px #102e3550;overflow:auto}
-.app-modal::backdrop{background:#102e3570;backdrop-filter:blur(3px)}
-.app-modal form{padding:24px;gap:16px}
-.modal-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:3px}
-.modal-heading h2{margin:5px 0 0}
-.modal-close{width:38px;height:38px;padding:0;border:1px solid var(--line);background:#f7faf9;color:var(--muted);font-size:24px;line-height:1}
-.app-modal .actions{margin-top:0;padding-top:14px}
+.app-modal{width:min(100% - 28px,460px);max-height:min(90dvh,680px);padding:0;border:1px solid #9bb4d7;border-radius:16px;background:#f7f9fe;color:var(--ink);box-shadow:0 24px 70px #102e3550;overflow:auto}
+.app-modal::backdrop{background:#0b1f3a88;backdrop-filter:blur(4px)}
+.app-modal form{padding:0 24px 24px;gap:16px}
+.modal-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin:0 -24px 3px;padding:20px 24px 17px;border-top:4px solid var(--blue);border-bottom:1px solid #cbd9ed;background:linear-gradient(115deg,#e8f0fc 0%,#f3f7fe 100%)}
+.modal-heading h2{margin:5px 0 0;color:#163d73}
+.modal-close{width:38px;height:38px;padding:0;border:1px solid #b7cae5;background:#fff;color:var(--blue-dark);font-size:24px;line-height:1}
+.modal-close:hover{background:#e7effb;border-color:#8ca9d0}
+.app-modal .actions{margin-top:0;padding-top:14px;border-top:1px solid #d6e1f0}
 .user-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 nav{max-width:1060px;margin:19px auto 0;padding:5px;display:flex;gap:6px;border:1px solid #d5dfed;border-radius:12px;background:#eaf0f8;box-shadow:0 2px 7px #183b3c08;overflow:auto;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
@@ -161,7 +162,8 @@ a{color:var(--blue-dark);font-weight:650;text-decoration-thickness:1px;text-unde
   .case-heading{align-items:flex-start;justify-content:flex-start;flex-direction:column}
   .auth-screen{padding:14px}
   .auth-card{padding:23px 18px}
-  .app-modal form{padding:20px 16px}
+  .app-modal form{padding:0 16px 20px}
+  .modal-heading{margin:0 -16px 3px;padding:16px}
   .app-modal .actions{display:grid;grid-template-columns:1fr}
   .app-modal .actions button,.user-actions button{width:100%}
   .user-actions{display:grid;grid-template-columns:1fr;width:100%}
