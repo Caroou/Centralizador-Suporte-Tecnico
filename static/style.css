@@ -84,11 +84,16 @@ button.danger:hover{background:#ffe5e1;border-color:#eac7c2}
 .knowledge-row.editing form{display:grid}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px;padding-top:14px;border-top:1px solid #edf1f0}
 .empty{text-align:center;padding:30px 20px;color:var(--muted)}
-.auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 15% 5%,#e3f1eb 0,transparent 45%),linear-gradient(140deg,#eef5f2,#f7f8f6)}
-.auth-card{width:min(100%,430px);background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px;box-shadow:0 20px 55px #183b3c16}
+.auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 15% 5%,#dce8f7 0,transparent 46%),radial-gradient(ellipse at 88% 90%,#e7edf7 0,transparent 42%),linear-gradient(140deg,#f0f4fa,#f8faff)}
+.auth-card{position:relative;overflow:hidden;width:min(100%,460px);background:#fff;border:1px solid #d4dfef;border-top:4px solid var(--blue);border-radius:16px;padding:32px;box-shadow:0 24px 70px #183b3c18}
 .auth-card h1{font-size:24px;line-height:1.2;letter-spacing:-.5px;margin:10px 0 8px;color:var(--ink)}
 .auth-card small{color:var(--muted);font-size:12px}
 .auth-card form{margin-top:20px}
+.auth-loading{display:flex;align-items:center;gap:13px;margin:23px 0 2px;padding:15px 16px;border:1px solid #dce6f3;border-radius:11px;background:linear-gradient(135deg,#f7faff,#eef4fc);color:#223b5a}
+.auth-loading strong{display:block;font-size:14px;font-weight:750}
+.auth-loading p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.auth-spinner{width:22px;height:22px;flex:0 0 22px;border:2px solid #c9d8ee;border-top-color:var(--blue);border-radius:50%;animation:auth-spin .8s linear infinite}
+@keyframes auth-spin{to{transform:rotate(360deg)}}
 a{color:var(--blue-dark);font-weight:650;text-decoration-thickness:1px;text-underline-offset:2px}
 #toast{position:fixed;z-index:5;bottom:20px;right:20px;background:#163c44;color:#fff;border:1px solid #ffffff18;box-shadow:0 8px 25px #102e3550;border-radius:9px;padding:12px 16px;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;max-width:min(420px,calc(100vw - 36px));pointer-events:none;font-size:13px}
 #toast.show{opacity:1;transform:none}

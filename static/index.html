@@ -10,6 +10,10 @@
   <div class="auth-card">
     <span class="eyebrow">SUPORTE TÉCNICO · ACESSO PRIVADO</span>
     <h1>Centralizador de Soluções e Diagnósticos</h1>
+    <div id="auth-loading" class="auth-loading" role="status" aria-live="polite" hidden>
+      <span class="auth-spinner" aria-hidden="true"></span>
+      <div><strong>Verificando seu acesso</strong><p>Conectando ao ambiente protegido…</p></div>
+    </div>
     <p id="auth-hint" class="muted"></p>
     <form id="login-form" hidden>
       <label>Usuário<input name="username" required autocomplete="username"></label>
@@ -27,7 +31,7 @@
 </section>
 
 <div id="app-shell" hidden>
-  <header><div><span class="eyebrow">SUPORTE TÉCNICO</span><h1>Centralizador de Soluções e Diagnósticos</h1><p>Troubleshooting guiado de notebooks e computadores</p></div><div class="header-account"><details class="account-menu"><summary id="user-label" class="badge">Minha conta</summary><div class="account-menu-items"><button type="button" onclick="togglePassword(); this.closest('details').open=false">Alterar senha</button><button type="button" class="account-logout" onclick="logout()">Sair</button></div></details></div></header>
+  <header><div><span class="eyebrow">SUPORTE TÉCNICO</span><h1>Centralizador de Soluções e Diagnósticos</h1><p>Troubleshooting guiado de notebooks e computadores</p></div><div class="header-account"><details id="account-menu" class="account-menu"><summary id="user-label" class="badge">Minha conta</summary><div class="account-menu-items"><button type="button" onclick="togglePassword(); this.closest('details').open=false">Alterar senha</button><button type="button" class="account-logout" onclick="logout()">Sair</button></div></details></div></header>
   <dialog id="password-dialog" class="app-modal" aria-labelledby="password-title"><form id="password-form"><div class="modal-heading"><div><span class="eyebrow">SUA CONTA</span><h2 id="password-title">Alterar senha</h2></div><button class="modal-close" type="button" aria-label="Fechar" onclick="togglePassword(false)">×</button></div><label>Senha atual<input name="current_password" type="password" required autocomplete="current-password"></label><label>Nova senha (mínimo 12 caracteres)<input name="new_password" type="password" minlength="12" maxlength="128" required autocomplete="new-password"></label><div class="actions"><button class="primary">Salvar nova senha</button><button type="button" class="secondary" onclick="togglePassword(false)">Cancelar</button></div></form></dialog>
   <nav>
     <button class="tab active" data-tab="new">Novo chamado</button>
