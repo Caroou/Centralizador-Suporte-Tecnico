@@ -19,11 +19,9 @@ services:
       - key: GEMINI_MODEL
         value: gemini-3.8-flash
       - key: FALLBACK_LLM_PROVIDER
-        value: openai_compatible
-      - key: FALLBACK_OPENAI_BASE_URL
-        value: https://api.groq.com/openai/v1
-      - key: FALLBACK_OPENAI_MODEL
-        value: openai/gpt-oss-20b
+        value: gemini
+      - key: FALLBACK_GEMINI_MODEL
+        value: gemini-3.1-flash-lite
       - key: MAX_OUTPUT_TOKENS
         value: "900"
       - key: LLM_TIMEOUT_SECONDS

@@ -45,7 +45,7 @@ Em produção, `DATABASE_URL` seleciona PostgreSQL; sem essa variável, o app co
 
 1. Crie um projeto Supabase e escolha uma região próxima da região Virginia do Render, se disponível.
 2. No Supabase, abra **Connect** e copie a URI do **Session pooler** (porta 5432), adequada a um backend persistente do Render em rede IPv4. Não use a chave `anon`/publishable: `DATABASE_URL` é a conexão PostgreSQL privada. Guarde-a como segredo.
-3. No Render, acesse **New > Blueprint**, conecte este repositório e escolha `main`. O Render lerá o `render.yaml` na raiz. Informe `DATABASE_URL`, a chave Gemini em `LLM_API_KEY`, a chave Groq em `FALLBACK_LLM_API_KEY` e `BOOTSTRAP_ADMIN_USERNAME`/`BOOTSTRAP_ADMIN_PASSWORD` (mínimo de 12 caracteres).
+3. No Render, acesse **New > Blueprint**, conecte este repositório e escolha `main`. O Render lerá o `render.yaml` na raiz. Informe `DATABASE_URL`, a chave Gemini em `LLM_API_KEY` e `FALLBACK_LLM_API_KEY` (a mesma chave pode ser usada nos dois modelos), além de `BOOTSTRAP_ADMIN_USERNAME`/`BOOTSTRAP_ADMIN_PASSWORD` (mínimo de 12 caracteres).
 4. O Render gera `DATA_ENCRYPTION_KEY` automaticamente. Se pretende migrar dados locais antes da primeira inicialização bem-sucedida, substitua-a pela chave do `.env` local. Guarde a chave usada em local seguro e não a altere depois: ela é necessária para descriptografar os dados.
 5. Confirme o deploy. A primeira execução cria as tabelas e carrega as referências gerais no Supabase. O primeiro usuário administrador é criado a partir das variáveis `BOOTSTRAP_ADMIN_*`.
 
