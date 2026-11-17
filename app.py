@@ -816,8 +816,44 @@ def _llm_call(prompt: dict[str, Any], provider: str, prefix: str, max_tokens: in
         body = {"systemInstruction":{"parts":[{"text":SYSTEM_PROMPT}]},"contents":[{"role":"user","parts":[{"text":json.dumps(prompt, ensure_ascii=False)}]}],"generationConfig":{"temperature":0.2,"maxOutputTokens":max_tokens,"responseMimeType":"application/json"}}
         headers = {"Content-Type": "application/json", "User-Agent": "Centralizador-Suporte/1.0"}
     elif provider == "openai_compatible":
-        url = os.getenv(f"{prefix}OPENAI_BASE_URL", "https://api.groq.com/openai/v1").rstrip("/") + "/chat/completions"
-        body = {"model":os.getenv(f"{prefix}OPENAI_MODEL", "llama-3.3-70b-versatile"),"messages":[{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":json.dumps(prompt, ensure_ascii=False)}],"temperature":0.2,"max_tokens":max_tokens,"response_format":{"type":"json_object"}}
+        base_url = os.getenv(f"{prefix}OPENAI_BASE_URL", "https://api.groq.com/openai/v1").rstrip("/")
+        model = os.getenv(f"{prefix}OPENAI_MODEL", "llama-3.3-70b-versatile")
+        url = base_url + "/chat/completions"
+        body = {"model":model,"messages":[{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":json.dumps(prompt, ensure_ascii=False)}],"temperature":0.2,"max_tokens":max_tokens,"response_format":{"type":"json_object"}}
+        # GPT-OSS na Groq pode falhar na validação best-effort do JSON mode.
+        # Schema estrito garante o formato consumido pelo app; esforço baixo
+        # reduz tokens de raciocínio e deixa mais orçamento para a resposta.
+        if "api.groq.com" in base_url and model.startswith("openai/gpt-oss-"):
+            body["reasoning_effort"] = "low"
+            body["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "troubleshooting_response",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "resumo": {"type": "string"},
+                            "hipoteses": {"type": "array", "maxItems": 5, "items": {
+                                "type": "object",
+                                "properties": {"teste": {"type": "string"}, "motivo": {"type": "string"}, "complexidade": {"type": "string"}},
+                                "required": ["teste", "motivo", "complexidade"], "additionalProperties": False,
+                            }},
+                            "proximo_passo": {"type": "string"},
+                            "esgotado": {"type": "boolean"},
+                            "encaminhamento": {"type": "string"},
+                            "peca": {"type": "object", "properties": {
+                                "necessaria": {"type": "boolean"}, "nome": {"type": "string"},
+                                "especificacoes": {"type": "array", "items": {"type": "string"}},
+                                "part_numbers_candidatos": {"type": "array", "items": {"type": "string"}},
+                                "termos_busca": {"type": "array", "items": {"type": "string"}},
+                            }, "required": ["necessaria", "nome", "especificacoes", "part_numbers_candidatos", "termos_busca"], "additionalProperties": False},
+                        },
+                        "required": ["resumo", "hipoteses", "proximo_passo", "esgotado", "encaminhamento", "peca"],
+                        "additionalProperties": False,
+                    },
+                },
+            }
         headers = {"Content-Type": "application/json","Authorization":f"Bearer {key}","User-Agent":"Centralizador-Suporte/1.0"}
     else: raise RuntimeError("provedor inválido")
     req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers, method="POST")
