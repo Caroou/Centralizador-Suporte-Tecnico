@@ -41,7 +41,7 @@ Localmente, os dados ficam no arquivo `centralizador.db` dentro da pasta do app 
 
 ### Render + Supabase
 
-Em produção, `DATABASE_URL` seleciona PostgreSQL; sem essa variável, o app continua usando SQLite local. No Render, o app exige `DATABASE_URL` para não gravar por engano no sistema de arquivos temporário. O `render.yaml` configura o serviço Web gratuito, região Virginia, Python 3.14.10 e health check em `/healthz`; os dados persistem no PostgreSQL do Supabase, sem disco Render.
+Em produção, `DATABASE_URL` seleciona PostgreSQL; sem essa variável, o app continua usando SQLite local. No Render, o app exige `DATABASE_URL` para não gravar por engano no sistema de arquivos temporário. O `render.yaml` configura o serviço Web gratuito, região Virginia, Python 3.14.10 e health check em `/healthz`; os dados persistem no PostgreSQL do Supabase, sem disco Render. O principal é Gemini 3.5 Flash-Lite e a reserva Gemini 3.1 Flash-Lite.
 
 1. Crie um projeto Supabase e escolha uma região próxima da região Virginia do Render, se disponível.
 2. No Supabase, abra **Connect** e copie a URI do **Session pooler** (porta 5432), adequada a um backend persistente do Render em rede IPv4. Não use a chave `anon`/publishable: `DATABASE_URL` é a conexão PostgreSQL privada. Guarde-a como segredo.
