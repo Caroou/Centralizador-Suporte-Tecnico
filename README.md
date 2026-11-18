@@ -1,5 +1,7 @@
 # Centralizador de Soluções e Diagnósticos
 
+Documentação para desenvolvimento: [arquitetura](ARCHITECTURE.md), [fluxos](FLOWS.md) e [orientações para agentes de programação](AI_GUIDE.md).
+
 Aplicação local em Python, FastAPI e SQLite para acompanhar chamados de notebooks e computadores desktop, conduzir diagnóstico assistido por IA e guardar os testes e desfechos validados.
 
 ## Estrutura
