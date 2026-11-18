@@ -180,3 +180,5 @@ a{color:var(--blue-dark);font-weight:650;text-decoration-thickness:1px;text-unde
   .scope-tab{font-size:11px}
   .step-item{grid-template-columns:70px minmax(0,1fr);gap:6px}
 }
+
+.knowledge-actions{display:inline-flex;gap:6px;flex-wrap:wrap}.danger-text{color:var(--red);border-color:#ecd1ce}.knowledge-record form{background:#f4f7fc;border:1px solid #d7e1ef;border-radius:9px;padding:13px;margin-top:9px}.knowledge-record form label{margin-top:4px}.close-form{margin-top:14px;padding:18px;background:#f4f7fc;border:1px solid #cbd9ed;border-left:4px solid var(--blue);border-radius:11px}.summary-note{margin:0 0 8px;padding:10px 12px;border-radius:8px;background:#e8f0fc;color:#304a6e;font-size:13px}

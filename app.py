@@ -809,6 +809,19 @@ def edit_knowledge(entry_id: int, data: KnowledgeUpdate, user: dict[str, Any] = 
         return rowdict(c.execute("SELECT * FROM knowledge WHERE id=?", (entry_id,)).fetchone())
 
 
+@app.delete("/api/knowledge/{entry_id}")
+def delete_knowledge(entry_id: int, user: dict[str, Any] = Depends(authenticated_write)):
+    with db() as c:
+        current = c.execute("SELECT ticket_id FROM knowledge WHERE id=? AND owner_user_id=?", (entry_id, user["id"])).fetchone()
+        if not current:
+            raise HTTPException(404, "Registro próprio não encontrado")
+        if current["ticket_id"]:
+            c.execute("DELETE FROM knowledge WHERE ticket_id=? AND owner_user_id=?", (current["ticket_id"], user["id"]))
+        else:
+            c.execute("DELETE FROM knowledge WHERE id=? AND owner_user_id=?", (entry_id, user["id"]))
+    return {"ok": True, "id": entry_id}
+
+
 SYSTEM_PROMPT = """Você é um assistente de troubleshooting de notebooks e computadores desktop para técnicos. Adapte os procedimentos ao tipo de equipamento informado. Use primeiro as referências da base geral e os casos anteriores fornecidos para evitar pesquisa externa de problemas básicos; não invente certeza e indique quando uma orientação depender do manual exato do modelo. Interprete os resultados registrados: 'passou' significa que aquele teste não encontrou falha, não que o sintoma foi resolvido; 'falhou' é evidência de problema naquele teste e deve orientar uma ação corretiva pertinente; 'inconclusivo' significa que o teste não permitiu concluir. Só considere o chamado resolvido se as observações do técnico indicarem que o sintoma cessou. Responda SOMENTE JSON válido com este formato: {\"resumo\":string,\"hipoteses\":[{\"teste\":string,\"motivo\":string,\"complexidade\":string}],\"proximo_passo\":string,\"esgotado\":boolean,\"encaminhamento\":string,\"peca\":{\"necessaria\":boolean,\"nome\":string,\"especificacoes\":[string],\"part_numbers_candidatos\":[string],\"termos_busca\":[string]}}. Forneça no máximo 5 testes em ordem do mais simples/seguro ao mais complexo e indique só um próximo passo. Nunca repita teste realizado, inclusive variações equivalentes. Peças são último recurso: só indique quando as verificações seguras e pertinentes estiverem esgotadas e houver evidência suficiente de qual componente falhou; se ainda houver teste útil, peca.necessaria=false. Ao esgotar opções, esgotado=true e recomende bancada, garantia ou encerramento quando não houver peça isolada. Qualquer part number é apenas candidato e deve ser conferido na etiqueta/manual devido a revisões e conectores. Não faça busca de preços."""
 
 
